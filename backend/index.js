@@ -1,30 +1,16 @@
+
 const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
-const authRoutes = require('./routes/authRoutes');
-const db = require('./config/db');
-
-dotenv.config();
 const app = express();
+const employeeRoutes = require('./routes/employees');
+require('dotenv').config();
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-// Routes
-app.use('/api/auth', authRoutes);
+// Route prefix
+app.use('/api/employees', employeeRoutes);
 
-app.get("/api/employees", async (req, res) => {
-    try {
-        const employees = await Employee.findAll(); // Fetch employees from database
-        res.json(employees);
-    } catch (error) {
-        res.status(500).json({ message: "Server error" });
-    }
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
-
-
-// Start Server
-const PORT = 5000
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
